@@ -1,3 +1,1 @@
-ReactDOMRe.renderToElementWithId(<Component2 greeting="Hello!" />, "index2");
-
-ReactDOMRe.renderToElementWithId(<ExamplePopover />, "index1");
+ReactDOMRe.renderToElementWithId(<PersistentDrawerLeft message="Example string" />, "index1");

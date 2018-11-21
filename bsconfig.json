@@ -19,7 +19,8 @@
   "namespace": true,
   "bs-dependencies": [
     "reason-react", 
-    "@jsiebern/bs-material-ui"
+    "@jsiebern/bs-material-ui",
+    "@mscharley/bs-material-ui-icons"
   ],
   "ppx-flags": [
     "./node_modules/@jsiebern/bs-material-ui/ppx_withStyles"
