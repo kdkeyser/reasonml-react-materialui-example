@@ -1,5 +1,9 @@
 module MenuIcon = MscharleyBsMaterialUiIcons.Menu;
 module ChevronLeftIcon = MscharleyBsMaterialUiIcons.ChevronLeft;
+module InboxIcon = MscharleyBsMaterialUiIcons.Inbox;
+
+module L = List;
+
 open MaterialUi;
 
 type state = {
@@ -8,7 +12,9 @@ type state = {
 };
 
 type action =
+  | DrawerClicked
   | IconButtonClicked;
+
 
 /* This is the basic component. */
 let component = ReasonReact.reducerComponent("PersistentDrawerLeft");
@@ -42,11 +48,12 @@ let make = (~message, children) => {
   ...component,
   initialState: () => {
     message : message,
-    opened : true
+    opened : false
   },
   reducer: (action, {message, opened}) => 
       switch action {
       | IconButtonClicked => ReasonReact.Update({message, opened: !opened})
+      | DrawerClicked => ReasonReact.Update({message, opened: false})
       },
   render: self =>
     <StyledPersistentDrawerLeft
@@ -54,7 +61,7 @@ let make = (~message, children) => {
       <div className={classes.root}>
         <CssBaseline />
         <AppBar position=`Fixed>
-          <Toolbar disableGutters=self.state.opened>
+          <Toolbar disableGutters=(!self.state.opened)>
             <IconButton color=`Inherit onClick=(_event => self.send(IconButtonClicked)) >
               <MenuIcon.Filled />
             </IconButton>
@@ -63,14 +70,25 @@ let make = (~message, children) => {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer variant=`Persistent anchor=`Left>
+        <Drawer variant=`Persistent anchor=`Left open_=self.state.opened>
           <div>
-            <IconButton >
+            <IconButton onClick=(_event => self.send(DrawerClicked))>
               <ChevronLeftIcon.Filled />
             </IconButton>
           </div>
           <Divider />
           <List>
+          (
+            ["Inbox", "Starred", "Send email", "Drafts"]
+            |> L.map (item =>
+                <ListItem button=true key=item>
+                  <ListItemIcon> <InboxIcon.Filled /> </ListItemIcon>
+                  <ListItemText primary=ReasonReact.string(item) />
+                </ListItem>
+               ) 
+            |> Array.of_list
+            |> ReasonReact.array
+          )  
           </List>
           <Divider />
           <List>
